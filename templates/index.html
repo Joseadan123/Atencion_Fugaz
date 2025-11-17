@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<h1 class="titulo">ATTENTIONAL BLINK TASK</h1>
+
+<div class="flecha izq">
+    ⬅
+    <div id="respuesta_izq" class="respuesta-num"></div>
+</div>
+
+<div class="flecha der">
+    ➡
+    <div id="respuesta_der" class="respuesta-num"></div>
+</div>
+
+<div class="circulo">
+    <span id="caracter"></span>
+</div>
+
+<!-- mensaje de correcto/incorrecto -->
+<div id="mensaje" class="mensaje"></div>
+
+<!-- botón para iniciar -->
+<button id="btnIniciar" class="btn-iniciar">INICIAR</button>
+
+<script src="{{ url_for('static', filename='js/juego.js')}}"></script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_resultado.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="report-box">
+    <h1 class="titulo">SESIÓN TERMINADA</h1>
+    <p class="status-error">ERROR DE SISTEMA: LÍMITE DE FALLOS ALCANZADO.</p>
+    <p>Tu desempeño ha terminado. Intenta de nuevo para mejorar tu atención.</p>
+    <a href="/" class="btn-iniciar">REINICIAR SESIÓN</a>
+</div>
+{% endblock content %}

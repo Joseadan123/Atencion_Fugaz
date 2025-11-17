@@ -1,0 +1,165 @@
+/* ======================================= */
+/* 1. Base y Configuración General         */
+/* ======================================= */
+:root {
+    --neon-color: #00ff66; /* Verde Neón principal */
+    --bg-color: #030303; /* Negro casi absoluto */
+    --clean-border-color: #008844; /* Verde más oscuro y sutil para bordes */
+}
+
+body {
+    background: var(--bg-color);
+    font-family: 'Consolas', 'Courier New', monospace;
+    color: var(--neon-color); 
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    
+    /* Mantenemos un parpadeo (Flicker) muy sutil */
+    animation: screen-flicker 0.2s infinite; 
+}
+
+@keyframes screen-flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.99; } /* Reducimos la intensidad del cambio */
+    100% { opacity: 1; }
+}
+
+/* Efecto de lluvia digital (Matrix Rain) y Scanlines - Sutil */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    /* Combinamos la lluvia vertical y las scanlines horizontales */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 255, 102, 0.05) 50%), /* Lluvia sutil */
+        repeating-linear-gradient(0deg, var(--bg-color), var(--bg-color) 1px, rgba(0, 255, 102, 0.02) 1px, rgba(0, 255, 102, 0.02) 2px); /* Scanlines */
+    background-size: 100% 20px, 100% 2px; /* Tamaño para lluvia (20px) y scanlines (2px) */
+    opacity: 0.08; /* Opacidad un poco mayor que antes, pero aún discreta */
+    pointer-events: none;
+    animation: rain 1s linear infinite; /* Activamos la animación de lluvia */
+    z-index: -1;
+}
+
+/* Reintroducimos la animación de la lluvia */
+@keyframes rain {
+    to {
+        background-position: 0 20px, 0 0; /* Solo la primera capa (lluvia) se mueve */
+    }
+}
+
+/* ======================================= */
+/* 2. La Caja de Reporte (report-box)      */
+/* ======================================= */
+
+.report-box {
+    width: 90%;
+    max-width: 500px; /* Un poco más compacto */
+    padding: 20px; /* Menos relleno */
+    background: rgba(0, 0, 0, 0.98); /* Más sólido */
+    
+    /* Borde duro y definido, sin la sombra neón exterior */
+    border: 1px solid var(--clean-border-color); 
+    
+    /* Sombra interior minimalista para un ligero brillo */
+    box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.2); 
+    
+    /* Pulsación muy suave: solo cambia el color del borde */
+    animation: report-pulse 3s infinite alternate; 
+    
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes report-pulse {
+    from { border-color: var(--clean-border-color); }
+    to { border-color: var(--neon-color); }
+}
+
+/* ======================================= */
+/* 3. Tipografía y Mensajes                */
+/* ======================================= */
+
+.titulo {
+    font-size: 24px; /* Más pequeño */
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px var(--neon-color); /* Sombra más suave */
+    letter-spacing: 2px; /* Menos espaciado */
+    color: #fff;
+    /* Línea de división más fina */
+    border-bottom: 1px solid var(--clean-border-color); 
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    
+    /* Efecto Glitch al Título - MUY SUTIL */
+    animation: glitch-subtle 3s linear infinite alternate;
+}
+
+/* Animación Glitch Minimalista (solo movimiento, sin offset de color) */
+@keyframes glitch-subtle {
+    0%, 100% { transform: translate(0); }
+    50% { transform: translate(-0.5px, 0.5px); }
+}
+
+p {
+    font-size: 15px; /* Más pequeño */
+    line-height: 1.5;
+    margin-bottom: 15px; /* Menos margen */
+    text-shadow: 0 0 2px var(--neon-color); /* Sombra muy sutil */
+    color: #ccffcc;
+}
+
+/* Mensaje de Éxito (ACCESO CONCEDIDO) */
+.status-success {
+    font-size: 20px; 
+    color: #33ff99; 
+    text-shadow: 0 0 10px #33ff99; /* Menos sombra */
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* Mensaje de Error (ACCESO DENEGADO) */
+.status-error {
+    font-size: 20px;
+    color: #ff3333; 
+    text-shadow: 0 0 10px #ff3333; /* Menos sombra */
+    font-weight: bold;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* ======================================= */
+/* 4. Botón de Navegación (Minimalista)    */
+/* ======================================= */
+.btn-iniciar {
+    margin-top: 25px;
+    padding: 10px 30px; /* Más pequeño */
+    font-size: 18px; 
+    background: transparent;
+    border: 1px solid var(--neon-color); /* Borde más fino */
+    color: var(--neon-color);
+    cursor: pointer;
+    text-shadow: 0 0 4px var(--neon-color);
+    transition: all 0.2s ease-out;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 1px;
+    font-weight: normal; /* Menos agresivo */
+}
+
+.btn-iniciar:hover {
+    /* Efecto minimalista: mantiene el texto y solo aumenta el brillo sutilmente */
+    background: rgba(0, 255, 102, 0.05); /* Fondo muy ligeramente visible */
+    box-shadow: 0 0 10px var(--neon-color);
+    transform: none; /* Quitamos el scale para evitar movimiento */
+    text-shadow: 0 0 8px var(--neon-color); /* Aumentamos el brillo del texto */
+    border-color: #33ff99;
+}

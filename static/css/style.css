@@ -1,0 +1,157 @@
+/* ==================================== */
+/* 1. Base y Fondo (Hacker Terminal)    */
+/* ==================================== */
+body {
+    background: #0a0a0a; /* Negro profundo */
+    font-family: "Courier New", monospace;
+    color: #00ff66; /* Verde Neón principal */
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    /* Suavizado de fuente para mejor lectura del neón */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Efecto de lluvia digital mejorado */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 255, 102, 0.05) 50%);
+    background-size: 100% 20px;
+    opacity: 0.1;
+    pointer-events: none;
+    animation: rain 1s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rain {
+    to {
+        background-position: 0 20px;
+    }
+}
+
+/* ==================================== */
+/* 2. Título y Mensajes                  */
+/* ==================================== */
+.titulo {
+    font-size: 38px;
+    margin-top: 25px;
+    /* Sombra más intensa y "profunda" */
+    text-shadow: 
+        0 0 5px #00ff66,
+        0 0 15px #00cc44;
+    letter-spacing: 5px;
+    font-weight: 700;
+}
+
+.mensaje {
+    margin-top: 70px;
+    font-size: 28px;
+    text-shadow: 0 0 12px #00ff66;
+    color: #ccffcc; /* Color más claro para visibilidad */
+}
+
+/* ==================================== */
+/* 3. Área Central (Secuencia y Círculo) */
+/* ==================================== */
+.circulo {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 5px solid #00ff66; /* Borde más grueso */
+    margin: 90px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow:
+        /* Sombra externa */
+        0 0 15px rgba(0, 255, 102, 0.8),
+        /* Sombra interna */
+        inset 0 0 25px rgba(0, 255, 102, 0.5);
+    animation: pulso 2s infinite ease-in-out; /* Pulso más lento y suave */
+}
+
+/* Animación de pulsación intensa */
+@keyframes pulso {
+    0%, 100% { 
+        box-shadow: 
+            0 0 18px rgba(0, 255, 102, 0.9), 
+            inset 0 0 30px rgba(0, 255, 102, 0.6);
+    }
+    50% { 
+        box-shadow: 
+            0 0 35px rgba(0, 204, 68, 1), 
+            inset 0 0 45px rgba(0, 204, 68, 0.8);
+    }
+}
+
+/* Caracter central */
+#caracter {
+    font-size: 95px;
+    font-weight: 900;
+    color: #fff; /* Blanco para contraste máximo */
+    text-shadow: 0 0 15px #00ff66;
+    animation: glitch 0.15s infinite; /* Glitch más rápido */
+}
+
+@keyframes glitch {
+    0% { opacity: 1; transform: translateX(0); }
+    33% { transform: translate(-1px, 1px); }
+    66% { transform: translate(1px, -1px); }
+    100% { opacity: 0.95; transform: translate(0); }
+}
+
+/* ==================================== */
+/* 4. Flechas y Respuestas               */
+/* ==================================== */
+.flecha {
+    position: absolute;
+    top: 280px; 
+    font-size: 65px;
+    font-weight: bold;
+    color: #00ff66;
+    text-shadow: 0 0 12px #00ff66;
+}
+
+.izq {
+    left: calc(50% - 320px); /* Separación ligeramente ajustada */
+}
+
+.der {
+    right: calc(50% - 320px); /* Separación ligeramente ajustada */
+}
+
+.respuesta-num {
+    font-size: 45px;
+    margin-top: 15px;
+    color: #66ff99; /* Verde más claro */
+    text-shadow: 0 0 18px #66ff99;
+}
+
+/* ==================================== */
+/* 5. Botón (Interactividad)             */
+/* ==================================== */
+.btn-iniciar {
+    margin-top: 80px;
+    padding: 16px 50px;
+    font-size: 24px;
+    background: transparent;
+    border: 3px solid #00ff66;
+    color: #00ff66;
+    border-radius: 6px;
+    cursor: pointer;
+    text-shadow: 0 0 8px #00ff66;
+    transition: all 0.3s ease;
+    text-decoration: none; /* Para usarlo en enlaces también */
+    display: inline-block;
+}
+
+.btn-iniciar:hover {
+    background: rgba(0, 255, 102, 0.15); /* Relleno semitransparente al pasar el mouse */
+    box-shadow: 0 0 15px #00ff66;
+    transform: scale(1.05); /* Efecto 3D sutil */
+}
