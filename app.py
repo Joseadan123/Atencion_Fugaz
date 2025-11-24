@@ -6,10 +6,6 @@ app = Flask(__name__)
 def juego():
     return render_template("index.html")
 
-@app.route("/perdiste")
-def perdiste():
-    return render_template("perdiste.html")
-
 @app.route("/resultado")
 def resultado():
     return render_template("resultado.html")

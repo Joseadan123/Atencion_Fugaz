@@ -6,10 +6,138 @@
 <div class="report-box">
     <h1 class="titulo">PROGRAMA FINALIZADO</h1>
     
-    <p class="status-success">ACCESO CONCEDIDO: JUEGO COMPLETADO.</p>
+    <p id="status-message" class="status-message"></p>
     
-    <p>¡Has demostrado una atención excepcional al pasar todas las rondas con éxito!</p>
+    <p id="description-message"></p>
+    
+    <div id="tabla-tiempos" class="tabla-tiempos">
+        <h2 class="subtitulo-tiempos">TIEMPOS POR RONDA</h2>
+        <table class="tabla-resultados">
+            <thead>
+                <tr>
+                    <th>Ronda</th>
+                    <th>Tiempo (s)</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="tiempos-tbody">
+                <!-- Los tiempos se cargarán aquí mediante JavaScript -->
+            </tbody>
+        </table>
+    </div>
     
     <a href="/" class="btn-iniciar">INICIAR NUEVA SESIÓN</a>
 </div>
+
+<script>
+    // Cargar tiempos desde sessionStorage
+    window.addEventListener('DOMContentLoaded', function() {
+        const tiemposData = sessionStorage.getItem('tiemposPorRonda');
+        const tbody = document.getElementById('tiempos-tbody');
+        const statusMessage = document.getElementById('status-message');
+        const descriptionMessage = document.getElementById('description-message');
+        
+        if (tiemposData) {
+            const tiempos = JSON.parse(tiemposData);
+            
+            if (tiempos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3">No hay datos de tiempos disponibles</td></tr>';
+                statusMessage.textContent = 'SESIÓN TERMINADA';
+                statusMessage.className = 'status-message';
+                descriptionMessage.textContent = 'No hay datos de tiempos disponibles.';
+                return;
+            }
+            
+            // Determinar si ganó o perdió (ganó si completó 8 rondas)
+            const ultimaRonda = tiempos[tiempos.length - 1].ronda;
+            const gano = ultimaRonda >= 8;
+            
+            // Actualizar mensajes según el resultado
+            if (gano) {
+                statusMessage.textContent = 'ACCESO CONCEDIDO: JUEGO COMPLETADO.';
+                statusMessage.className = 'status-success';
+                descriptionMessage.textContent = '¡Has demostrado una atención excepcional al pasar todas las rondas con éxito!';
+            } else {
+                statusMessage.textContent = 'SESIÓN TERMINADA';
+                statusMessage.className = 'status-message';
+                descriptionMessage.textContent = 'Tu desempeño ha terminado. Revisa tus resultados a continuación.';
+            }
+            
+            tiempos.forEach(function(item) {
+                const row = document.createElement('tr');
+                const tiempoSegundos = (item.tiempo / 1000).toFixed(2);
+                const estadoTexto = item.correcto ? '✓ Correcto' : '✗ Incorrecto';
+                const estadoClase = item.correcto ? 'estado-correcto' : 'estado-incorrecto';
+                
+                row.innerHTML = `
+                    <td>${item.ronda}</td>
+                    <td>${tiempoSegundos}</td>
+                    <td class="${estadoClase}">${estadoTexto}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Limpiar sessionStorage después de mostrar los datos
+            sessionStorage.removeItem('tiemposPorRonda');
+        } else {
+            tbody.innerHTML = '<tr><td colspan="3">No hay datos de tiempos disponibles</td></tr>';
+            statusMessage.textContent = 'SESIÓN TERMINADA';
+            statusMessage.className = 'status-message';
+            descriptionMessage.textContent = 'No hay datos de tiempos disponibles.';
+        }
+    });
+</script>
+
+<style>
+    .tabla-tiempos {
+        margin: 30px 0;
+        text-align: center;
+    }
+    
+    .subtitulo-tiempos {
+        font-size: 18px;
+        color: var(--neon-color);
+        text-shadow: 0 0 8px var(--neon-color);
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+    }
+    
+    .tabla-resultados {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 14px;
+    }
+    
+    .tabla-resultados th {
+        background: rgba(0, 255, 102, 0.1);
+        border: 1px solid var(--clean-border-color);
+        padding: 10px;
+        color: var(--neon-color);
+        text-shadow: 0 0 4px var(--neon-color);
+        letter-spacing: 1px;
+    }
+    
+    .tabla-resultados td {
+        border: 1px solid var(--clean-border-color);
+        padding: 10px;
+        color: #ccffcc;
+    }
+    
+    .tabla-resultados tr:nth-child(even) {
+        background: rgba(0, 255, 102, 0.03);
+    }
+    
+    .estado-correcto {
+        color: #33ff99;
+        text-shadow: 0 0 4px #33ff99;
+        font-weight: bold;
+    }
+    
+    .estado-incorrecto {
+        color: #ff6666;
+        text-shadow: 0 0 4px #ff6666;
+        font-weight: bold;
+    }
+</style>
 {% endblock content %}

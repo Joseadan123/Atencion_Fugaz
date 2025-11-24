@@ -8,11 +8,17 @@ let numIzq = null;
 let numDer = null;
 let esperando = false;
 
+// Variables para el temporizador
+let tiempoInicioRonda = null;
+let tiemposPorRonda = [];
+
 function generarSecuencia() {
     secuencia = [];
     // Nota: Se usa un string de letras sin I, O, Q, S para evitar confusión con números
     const letras = "ABCDEFGHJKLMNPRTUVWXY Z"; 
-    const longitud = 10;
+    // Longitud inicial: 10, aumenta 2 caracteres por ronda
+    // Ronda 1: 10, Ronda 2: 12, Ronda 3: 14, ..., Ronda 8: 24
+    const longitud = 10 + (ronda - 1) * 2;
 
     // Crear la secuencia inicial de letras
     for (let i = 0; i < longitud; i++) {
@@ -37,7 +43,6 @@ function mostrarSecuencia() {
     esperando = false;
 
     // Limpiar pantalla
-    document.getElementById("mensaje").textContent = "";
     document.getElementById("respuesta_izq").textContent = "";
     document.getElementById("respuesta_der").textContent = "";
 
@@ -52,6 +57,8 @@ function mostrarSecuencia() {
             esperando = true;
             numIzq = null;
             numDer = null;
+            // Iniciar el temporizador cuando la secuencia termine
+            tiempoInicioRonda = Date.now();
         }
     }
 
@@ -74,42 +81,58 @@ document.addEventListener("keydown", function(e) {
         // Captura el segundo número (derecho)
         numDer = e.key;
         document.getElementById("respuesta_der").textContent = numDer;
-        validarRonda(); // Una vez que tiene ambos, valida
+        
+        // Detener el temporizador inmediatamente cuando ingresa el segundo número
+        let tiempoRespuesta = null;
+        if (tiempoInicioRonda !== null) {
+            tiempoRespuesta = Date.now() - tiempoInicioRonda;
+            tiempoInicioRonda = null; // Detener el temporizador
+        }
+        
+        // Desactivar la espera para evitar más inputs
+        esperando = false;
+        
+        // Mostrar las respuestas un momento antes de validar
+        setTimeout(() => {
+            validarRonda(tiempoRespuesta);
+        }, 800); // Mostrar por 800ms antes de pasar a la siguiente ronda
     }
 });
 
-function validarRonda() {
-    const msg = document.getElementById("mensaje");
+function validarRonda(tiempoRespuesta) {
+    // Guardar el tiempo de respuesta (ya calculado y pasado como parámetro)
+    if (tiempoRespuesta !== null) {
+        tiemposPorRonda.push({
+            ronda: ronda,
+            tiempo: tiempoRespuesta,
+            correcto: false
+        });
+    }
 
     // SOLUCIÓN AL PROBLEMA DE TIPOS: convertimos las entradas a Number para compararlas con n1/n2
     if (parseInt(numIzq) === numerosObjetivo.n1 && parseInt(numDer) === numerosObjetivo.n2) {
-        msg.textContent = "Correcto";
+        if (tiempoRespuesta !== null) {
+            tiemposPorRonda[tiemposPorRonda.length - 1].correcto = true;
+        }
     } else {
         errores++;
-        msg.textContent = `Incorrecto (Errores: ${errores}/3)`;
-    }
-
-    if (errores >= 3) {
-        // Redirige a Flask para mostrar la pantalla de perdiste
-        setTimeout(() => window.location.href = "/perdiste", 1500);
-        return;
     }
 
     ronda++;
-    if (ronda > 5) {
+    if (ronda > 8) {
+        // Guardar tiempos en sessionStorage antes de redirigir
+        sessionStorage.setItem('tiemposPorRonda', JSON.stringify(tiemposPorRonda));
         // Redirige a Flask para mostrar la pantalla de resultado/victoria
-        setTimeout(() => window.location.href = "/resultado", 1500);
+        window.location.href = "/resultado";
         return;
     }
 
-    // Aumentar la dificultad: reducir velocidad
-    velocidad = Math.max(80, velocidad - 40);
+    // Aumentar la velocidad (reducir el tiempo entre caracteres)
+    velocidad = Math.max(50, velocidad - 30); // Reduce 30ms por ronda, mínimo 50ms
 
-    // Iniciar la siguiente ronda después de una pausa
-    setTimeout(() => {
-        numerosObjetivo = generarSecuencia();
-        mostrarSecuencia();
-    }, 2000);
+    // Iniciar la siguiente ronda inmediatamente después de mostrar las respuestas
+    numerosObjetivo = generarSecuencia();
+    mostrarSecuencia();
 }
 
 // Al presionar el botón iniciar

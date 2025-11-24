@@ -53,6 +53,7 @@ body::before {
     font-size: 28px;
     text-shadow: 0 0 12px #00ff66;
     color: #ccffcc; /* Color más claro para visibilidad */
+    display: none; /* Ocultar el mensaje */
 }
 
 /* ==================================== */
