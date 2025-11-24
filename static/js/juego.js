@@ -15,7 +15,7 @@ let tiemposPorRonda = [];
 function generarSecuencia() {
     secuencia = [];
     // Nota: Se usa un string de letras sin I, O, Q, S para evitar confusión con números
-    const letras = "ABCDEFGHJKLMNPRTUVWXY Z"; 
+    const letras = "ABCDEFGHJKLMNPRTUVWXYZ"; 
     // Longitud inicial: 10, aumenta 2 caracteres por ronda
     // Ronda 1: 10, Ronda 2: 12, Ronda 3: 14, ..., Ronda 8: 24
     const longitud = 10 + (ronda - 1) * 2;
@@ -109,7 +109,6 @@ function validarRonda(tiempoRespuesta) {
         });
     }
 
-    // SOLUCIÓN AL PROBLEMA DE TIPOS: convertimos las entradas a Number para compararlas con n1/n2
     if (parseInt(numIzq) === numerosObjetivo.n1 && parseInt(numDer) === numerosObjetivo.n2) {
         if (tiempoRespuesta !== null) {
             tiemposPorRonda[tiemposPorRonda.length - 1].correcto = true;
