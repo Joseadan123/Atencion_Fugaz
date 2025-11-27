@@ -15,7 +15,7 @@ let tiemposPorRonda = [];
 function generarSecuencia() {
     secuencia = [];
     // Nota: Se usa un string de letras sin I, O, Q, S para evitar confusión con números
-    const letras = "ABCDEFGHJKLMNPRTUVWXYZ"; 
+    const letras = "ABCDEFGHJKLMNPRTUVWXYZ";
     // Longitud inicial: 10, aumenta 2 caracteres por ronda
     // Ronda 1: 10, Ronda 2: 12, Ronda 3: 14, ..., Ronda 8: 24
     const longitud = 10 + (ronda - 1) * 2;
@@ -65,7 +65,7 @@ function mostrarSecuencia() {
     paso();
 }
 
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", function (e) {
     if (!esperando) return;
     // Solo acepta teclas de números del 1 al 9
     if (e.key < "1" || e.key > "9") return;
@@ -81,17 +81,17 @@ document.addEventListener("keydown", function(e) {
         // Captura el segundo número (derecho)
         numDer = e.key;
         document.getElementById("respuesta_der").textContent = numDer;
-        
+
         // Detener el temporizador inmediatamente cuando ingresa el segundo número
         let tiempoRespuesta = null;
         if (tiempoInicioRonda !== null) {
             tiempoRespuesta = Date.now() - tiempoInicioRonda;
             tiempoInicioRonda = null; // Detener el temporizador
         }
-        
+
         // Desactivar la espera para evitar más inputs
         esperando = false;
-        
+
         // Mostrar las respuestas un momento antes de validar
         setTimeout(() => {
             validarRonda(tiempoRespuesta);
@@ -137,7 +137,7 @@ function validarRonda(tiempoRespuesta) {
 // Al presionar el botón iniciar
 document.getElementById("btnIniciar").addEventListener("click", () => {
     document.getElementById("btnIniciar").style.display = "none";
-    
+
     // Iniciar la primera ronda
     numerosObjetivo = generarSecuencia();
     mostrarSecuencia();
